@@ -1,4 +1,4 @@
-package com.nefarious.socialnetwork.social_network;
+package com.nefarious.socialnetwork;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
