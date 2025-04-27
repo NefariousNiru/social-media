@@ -52,8 +52,9 @@ This project is a **Social Media Network** built using **Spring Boot**, **Postgr
 
 ### **Step 6: Real-Time Chat System**
 ✅ Implement WebSockets for real-time messaging.  
-✅ Use Redis Pub/Sub for scalable chat distribution.  
-✅ Store chat history in PostgreSQL.  
+✅ Use Redis Pub/Sub for scalable chat distribution.   
+PostgreSQL → Chat summary (chat rooms, latest timestamp, participants)
+MongoDB → Actual chat messages (each message as a document).
 ✅ [Redis Pub/Sub Guide](https://redis.io/topics/pubsub)
 
 ### **Step 7: API Gateway & Microservices**
