@@ -15,8 +15,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.UUID;
-
 
 @Slf4j
 @Service
@@ -45,6 +43,15 @@ public class AuthService {
         }
     }
 
+    /**
+     * Handles user signin requests.
+     *
+     * <p>Authenticates the user credentials, and upon successful authentication,
+     * generates access and refresh tokens and creates a session.
+     *
+     * @param request {@link SigninRequest} containing email and password.
+     * @return {@link SessionResponse} containing access and refresh tokens upon successful signin.
+     */
     public SessionResponse signin(@Valid SigninRequest request) {
         userService.authenticate(request);
         return this.generateTokenAndCreateSession(request.getEmail());
@@ -63,11 +70,24 @@ public class AuthService {
         return this.generateTokenAndCreateSession(email);
     }
 
+    /**
+     * Generates a new OTP for the given email, saves it, and sends it via email.
+     *
+     * <p>Creates a one-time password (OTP), stores it for verification,
+     * and emails the OTP to the provided address.
+     *
+     * @param email the email address to which the OTP will be sent.
+     */
     public void generateAndSaveAndEmailOtp(String email) {
         String code = otpService.generateAndSaveOtp(email);
         emailService.sendOtpEmail(email, code);
     }
 
+    /**
+     * Generate a token using {@link JwtTokenProvider} and create a session using {@link SessionService} (persist in Redis)
+     * @param email email of user to create token against
+     * @return sessionResponse {@link SessionResponse} type object
+     */
     private SessionResponse generateTokenAndCreateSession(String email) {
         User user = userService.getByEmail(email);
         String accessToken = jwtTokenProvider.generateToken(user.getId(), TokenType.ACCESS);

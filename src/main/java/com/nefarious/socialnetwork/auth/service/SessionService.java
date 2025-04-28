@@ -34,10 +34,12 @@ public class SessionService {
                 .set(key, userId.toString(), Duration.ofMillis(ttl));
     }
 
+    /** Validate Access Token */
     public Optional<UUID> validateAccessToken(String token) {
         return validateSession(token, TokenType.ACCESS);
     }
 
+    /** Validate Refresh Token */
     public Optional<UUID> validateRefreshToken(String token) {
         return validateSession(token, TokenType.REFRESH);
     }

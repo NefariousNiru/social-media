@@ -6,6 +6,7 @@ import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 
+/** This class is used to capture the data required for user login. Fields:Email & Password */
 @Data
 public class SigninRequest {
     @Email @NotBlank private String email;

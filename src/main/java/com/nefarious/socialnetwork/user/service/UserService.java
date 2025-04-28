@@ -43,18 +43,40 @@ public class UserService {
         userRepository.save(user);
     }
 
+    /**
+     * Authenticates a user by verifying email and password credentials.
+     *
+     * <p>Throws {@link BusinessException} if credentials are invalid or email is not verified.
+     *
+     * @param signinRequest {@link SigninRequest} containing the user's email and password.
+     */
     public void authenticate(SigninRequest signinRequest) {
         User user = this.getByEmail(signinRequest.getEmail());
         if (!passwordEncoder.matches(signinRequest.getPassword(), user.getPassword())) throw new BusinessException(AuthErrorCode.INVALID_CREDENTIALS);
         if (!user.isEmailVerified()) throw new BusinessException(AuthErrorCode.EMAIL_NOT_VERIFIED);
     }
 
+    /**
+     * Marks the user's email as verified.
+     *
+     * <p>Fetches the user by email, updates the verification status, and persists the change.
+     *
+     * @param email the email address of the user to mark as verified.
+     */
     public void markEmailVerified(String email) {
         User user = this.getByEmail(email);
         user.setEmailVerified(true);
-        userRepository.save(user);          // persists the change
+        userRepository.save(user);
     }
 
+    /**
+     * Retrieves a user by email.
+     *
+     * <p>Throws {@link BusinessException} if no user is found with the given email.
+     *
+     * @param email the email address to search for.
+     * @return {@link User} entity matching the provided email.
+     */
     public User getByEmail(String email) {
         return userRepository.findByEmail(email)
                 .orElseThrow(() -> new BusinessException(AuthErrorCode.USER_NOT_EXISTS));

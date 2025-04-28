@@ -4,8 +4,6 @@ import com.nefarious.socialnetwork.auth.dto.OtpVerificationRequest;
 import com.nefarious.socialnetwork.auth.dto.SessionResponse;
 import com.nefarious.socialnetwork.auth.dto.SigninRequest;
 import com.nefarious.socialnetwork.auth.service.AuthService;
-import com.nefarious.socialnetwork.auth.service.SessionService;
-import com.nefarious.socialnetwork.user.service.UserService;
 import com.nefarious.socialnetwork.auth.util.AuthEndpoint;
 import com.nefarious.socialnetwork.auth.dto.SignupRequest;
 import jakarta.validation.Valid;
@@ -20,8 +18,6 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class AuthController {
     private final AuthService authService;
-    private final SessionService sessionService;
-    private final UserService userService;
 
     /**
      * Handles user signup requests.
@@ -69,6 +65,15 @@ public class AuthController {
         return ResponseEntity.ok(response);
     }
 
+    /**
+     * Handles requests to resend OTP during signup.
+     *
+     * <p>Accepts an email as a request parameter,
+     * generates a new OTP, saves it, and sends it to the user's email address.
+     *
+     * @param email the email address to which the OTP will be sent. Must be a valid email.
+     * @return 202 Accepted if the OTP is successfully generated and sent.
+     */
     @GetMapping(AuthEndpoint.RESEND_OTP)
     public ResponseEntity<Void> resendOtp(@RequestParam @Email String email) {
         authService.generateAndSaveAndEmailOtp(email);

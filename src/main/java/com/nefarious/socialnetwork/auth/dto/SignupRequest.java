@@ -5,8 +5,7 @@ import lombok.Data;
 import java.time.LocalDate;
 
 /** This class is used to capture the data required for user registration, including validation
- * for the email, password, username, firstname, lastname, and date of birth fields
- * */
+ * for the email, password, username, firstname, lastname, and date of birth fields */
 @Data
 public class SignupRequest {
     @Email @NotBlank private String email;
