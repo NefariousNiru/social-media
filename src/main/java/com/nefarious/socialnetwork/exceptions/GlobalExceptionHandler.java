@@ -1,7 +1,9 @@
 package com.nefarious.socialnetwork.exceptions;
 
 
-import com.nefarious.socialnetwork.dto.ApiError;
+import com.nefarious.socialnetwork.auth.dto.BusinessError;
+import com.nefarious.socialnetwork.util.interfaces.ErrorCode;
+import com.nefarious.socialnetwork.util.enums.BaseErrorCode;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,29 +17,38 @@ import java.util.stream.Collectors;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(IllegalArgumentException.class)
-    public ResponseEntity<ApiError> handleIllegalArg(IllegalArgumentException ex) {
+    /** Handler for your custom business exceptions */
+    @ExceptionHandler(BusinessException.class)
+    public ResponseEntity<BusinessError> handleBusiness(BusinessException ex) {
+        ErrorCode code = ex.getErrorCode();
+        BusinessError body = new BusinessError(code, code.getMessage(), System.currentTimeMillis());
         return ResponseEntity
-                .status(HttpStatus.BAD_REQUEST)
-                .body(new ApiError(ex.getMessage()));
+                .status(code.getHttpStatus())
+                .body(body);
     }
 
     /** Handle @Valid bean validation failures */
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ApiError> handleValidation(MethodArgumentNotValidException ex) {
+    public ResponseEntity<BusinessError> handleValidation(MethodArgumentNotValidException ex) {
         String errors = ex.getBindingResult().getFieldErrors().stream()
                 .map(FieldError::getDefaultMessage)
                 .collect(Collectors.joining("; "));
+        BusinessError body = new BusinessError(BaseErrorCode.VALIDATION_FAILED, errors, System.currentTimeMillis());
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
-                .body(new ApiError(errors));
+                .body(body);
     }
 
     /** Fallback for any other unhandled exception */
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<ApiError> handleAll(Exception ex, HttpServletRequest req) {
+    public ResponseEntity<BusinessError> handleAll(Exception ex, HttpServletRequest req) {
+        BusinessError body = new BusinessError(
+                BaseErrorCode.VALIDATION_FAILED,
+                "An unexpected error occurred",
+                System.currentTimeMillis()
+        );
         return ResponseEntity
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(new ApiError("An unexpected error occurred"));
+                .body(body);
     }
 }
