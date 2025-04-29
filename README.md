@@ -1,9 +1,82 @@
-# Social Media Network - Full Stack Development Roadmap
+# 📚 **EduShare: Social Media Network for Education & Skill Sharing**
 
-## 📌 Overview
+## 🌟 **Product Vision:**
+
+EduShare empowers continuous learning by connecting users through engaging, bite-sized educational content and interactive skill-sharing communities, enhanced by AI-driven personalization.
+
+----------
+
+## 🎯 **Target Audience:**
+
+-   Students (High School & University)
+
+-   Professionals seeking continuous learning
+
+-   Educators & Skill Experts
+
+
+----------
+
+## 📌 **Core Features:**
+
+### 1. **Interactive Content Creation**
+
+-   Short-form educational videos (30 seconds - 3 minutes)
+
+-   Rich posts with images, code snippets, PDFs
+
+-   Carousel-style bite-sized lessons
+
+
+### 2. **Social & Community Interaction**
+
+-   Follow/unfollow educators, experts, peers
+
+-   User-generated Q&A discussions
+
+-   Engagement through comments, likes, shares
+
+
+### 3. **Real-Time Chat & Collaboration**
+
+-   Direct messaging (DMs)
+
+-   Group chats for collaborative learning
+
+-   Integrated video/audio calls for live tutoring
+
+### 4. **Personalized Learning with AI**
+
+-   AI-powered personalized content feeds
+
+-   Adaptive learning paths based on interests and activity
+
+-   Bookmarking and content organization
+
+
+### 5. **Quizzes & Interactive Challenges**
+
+-   Quick, interactive quizzes with instant feedback
+
+-   Community-driven educational challenges
+
+-   Gamified elements (scoreboards, badges)
+
+
+### 6. **Expert Verification & Quality Assurance**
+
+-   Verified badges for credible educators and experts
+
+-   Content quality ratings and reviews
+
+-   Robust moderation and reporting mechanisms
+
+---
+
+## 📌 Tech Overview
 This project is a **Social Media Network** built using **Spring Boot**, **PostgreSQL**, **Neo4j**, **Kafka**, **Redis**, **RabbitMQ**, **WebSockets**, and **Lombok**. It covers **real-time messaging, event-driven notifications, personalized recommendations, and high scalability** over a **4-6 month period** to master **Spring and its ecosystem**.
 
-## 🚀 Technologies Used
+## 🚀 Technologies To Be Used
 | **Technology** | **Purpose** | **Resources** |
 |--------------|------------|-------------|
 | **Spring Boot** | Core backend framework | [Spring Boot Docs](https://spring.io/projects/spring-boot), [Spring in Action (Book)](https://www.amazon.com/Spring-Action-Craig-Walls/dp/1617297577), [Udemy: Spring Boot Microservices](https://www.udemy.com/course/microservices-with-spring-boot-and-spring-cloud/) |
@@ -19,70 +92,75 @@ This project is a **Social Media Network** built using **Spring Boot**, **Postgr
 
 ---
 
-## 🛠️ Features & Learning Steps
+## 🛠️ **Technical Development Roadmap:**
 
 ### **Step 1: Setup & Basic Configuration**
-✅ Initialize the Spring Boot project with PostgreSQL, Neo4j, and Lombok.  
-✅ Configure database connections, application properties, and project structure.  
-✅ [Spring Boot Official Guide](https://spring.io/guides/gs/spring-boot/)
+
+✅ Initialize Spring Boot project with PostgreSQL, Neo4j, Lombok, and Redis.  
+✅ Configure database connections, application properties, and basic project structure.
 
 ### **Step 2: User Authentication & Profiles**
-✅ JWT & OAuth2-based authentication.  
-✅ CRUD operations on user profiles.  
-✅ Implement follow/unfollow with Neo4j relationships.  
-✅ [Spring Security Guide](https://spring.io/projects/spring-security)
 
-### **Step 3: Posts, Comments, Likes**
-✅ CRUD operations for posts and comments.  
-✅ Like/Unlike feature using Redis caching.  
-✅ Kafka event-based post activity stream.  
-✅ [Kafka Streams Guide](https://kafka.apache.org/documentation/streams/)
+✅ Implement JWT & OAuth2 authentication.  
+☑️ CRUD operations for user profiles.  
+☑️ Implement follow/unfollow with Neo4j relationships.
 
-### **Step 4: Notifications & WebSockets**
-✅ Real-time notifications using RabbitMQ & WebSockets.  
-✅ WebSocket connection for user interactions.  
-✅ Event-driven notifications when users like/follow/comment.  
-✅ [Spring WebSockets Guide](https://docs.spring.io/spring-framework/docs/current/reference/html/web.html#websocket)
-✅ Global IP Based Rate Limiting
+### **Step 3: Interactive Content Creation & Management**
 
-### **Step 5: Search, Trending & Recommendations**
-✅ Implement ElasticSearch for full-text search.  
-✅ Redis caching for trending posts.  
-✅ Graph-based friend recommendations using Neo4j.  
-✅ [Neo4j Graph Algorithms](https://neo4j.com/developer/graph-data-science/)
+☑️ CRUD operations for educational videos, rich posts, and carousels.  
+☑️ Integrate multimedia support (video/image uploads, PDFs).  
+☑️ Kafka event-driven updates for content posting activity.
 
-### **Step 6: Real-Time Chat System**
-✅ Implement WebSockets for real-time messaging.  
-✅ Use Redis Pub/Sub for scalable chat distribution.   
-PostgreSQL → Chat summary (chat rooms, latest timestamp, participants)
-MongoDB → Actual chat messages (each message as a document).
-✅ [Redis Pub/Sub Guide](https://redis.io/topics/pubsub)
+### **Step 4: Social Features & User Engagement**
 
-### **Step 7: API Gateway & Microservices**
-✅ Implement API Gateway with Spring Cloud Gateway.  
-✅ Configure Eureka for service discovery.  
-✅ Use OpenFeign for microservice communication.  
-✅ [Spring Cloud Documentation](https://spring.io/projects/spring-cloud)
+☑️ Likes, comments, and share functionality.  
+☑️ Redis caching for quick interaction counts.  
+☑️ Notification triggers using RabbitMQ.
 
-### **Step 8: Monitoring, Logging & Observability**
-✅ Distributed tracing with Zipkin.  
-✅ Metrics collection with Prometheus & Micrometer.  
-✅ Centralized logging with ELK Stack.  
-✅ [Zipkin Guide](https://zipkin.io/)
+### **Step 5: Real-Time Chat & Collaboration**
 
-### **Step 9: Deployment & Scaling**
-✅ Deploy microservices with Docker & Kubernetes.  
-✅ Set up a CI/CD pipeline.  
-✅ Scale services dynamically based on traffic.  
-✅ [Kubernetes Docs](https://kubernetes.io/docs/)
+☑️ Real-time messaging via WebSockets.  
+☑️ Redis Pub/Sub for scalable real-time distribution.  
+☑️ PostgreSQL for chat summaries; MongoDB for detailed chat logs.
+
+### **Step 6: Personalized Learning & Recommendations**
+
+☑️ Implement ElasticSearch for content search and filtering.  
+☑️ Redis caching for trending educational content.  
+☑️ AI-driven personalized recommendations and adaptive learning paths.  
+☑️ Graph-based recommendations (content & friends & educators) using Neo4j.
+
+### **Step 7: Quizzes, Challenges & Gamification**
+
+☑️ Interactive quizzes and instant feedback functionality.  
+☑️ Scoreboard and gamification features managed via Redis.  
+☑️ Kafka event streams for real-time quiz results.
+
+### **Step 8: Expert Verification & Quality Control**
+
+☑️ Expert verification system with verified badges.  
+☑️ User rating and moderation functionality.  
+☑️ Admin dashboards for content moderation.
+
+### **Step 9: API Gateway & Microservices**
+
+☑️ Setup API Gateway with Spring Cloud Gateway.  
+☑️ Configure Eureka for service discovery.  
+☑️ Implement inter-service communication using OpenFeign.
+
+### **Step 10: Monitoring, Logging & Observability**
+
+☑️ Distributed tracing with Zipkin.  
+☑️ Metrics collection with Prometheus & Micrometer.  
+☑️ Centralized logging using ELK Stack.
+
+### **Step 11: Deployment & Scaling**
+
+☑️ Deploy microservices using Docker & Kubernetes.  
+☑️ Continuous Integration & Deployment (CI/CD).  
+☑️ Automatic scaling strategies based on user load.
 
 ---
-
-## 📌 Next Steps
-- ✅ Start with **Spring Boot + PostgreSQL + Neo4j setup**
-- ✅ Follow the step-based learning roadmap
-- ✅ Gradually implement features while learning advanced Spring Boot concepts
-
 
 ## Recommended Books to Read
 
@@ -101,4 +179,7 @@ MongoDB → Actual chat messages (each message as a document).
 - 📖 Designing Data-Intensive Applications – Martin Kleppmann
 
 🚀 **This is a 4-6 month deep dive into Spring Boot and its ecosystem! Let's build this together!** 🔥
+
+
+
 
