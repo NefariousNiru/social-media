@@ -11,6 +11,13 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.stereotype.Component;
 
+/**
+ * Aspect that intercepts methods annotated with @RateLimit and enforces rate limiting
+ * using Redis and configuration properties.
+ *
+ * <p>This uses Redis to track the number of attempts and rejects calls
+ * when the threshold is exceeded.
+ */
 @Aspect
 @Slf4j
 @Component
@@ -18,6 +25,15 @@ import org.springframework.stereotype.Component;
 public class RateLimitAspect {
     private final RateLimiterService rateLimiterService;
 
+    /**
+     * Intercepts methods with @RateLimit, resolves the Redis key using method parameters,
+     * and enforces the configured limit.
+     *
+     * @param joinPoint the method invocation being intercepted
+     * @param rateLimit the annotation with rate limit config
+     * @return the result of the method call, if allowed
+     * @throws Throwable if the limit is exceeded or method throws
+     */
     @Around("@annotation(rateLimit)")
     public Object around(ProceedingJoinPoint joinPoint, RateLimit rateLimit) throws Throwable {
         MethodSignature signature = (MethodSignature) joinPoint.getSignature();
