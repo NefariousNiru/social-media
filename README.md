@@ -98,6 +98,7 @@ This project is a **Social Media Network** built using **Spring Boot**, **Postgr
 
 ✅ Initialize Spring Boot project with PostgreSQL, Neo4j, Lombok, and Redis.  
 ✅ Configure database connections, application properties, and basic project structure.
+✅ API Versioning
 
 ### **Step 2: User Authentication & Profiles**
 
@@ -141,6 +142,9 @@ This project is a **Social Media Network** built using **Spring Boot**, **Postgr
 ☑️ Expert verification system with verified badges.  
 ☑️ User rating and moderation functionality.  
 ☑️ Admin dashboards for content moderation.
+
+### **Step 8.5: Push Notification for Mobile**
+☑️ Add push notifications as Mobile is the main app
 
 ### **Step 9: API Gateway & Microservices**
 
