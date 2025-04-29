@@ -43,7 +43,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
     public ResponseEntity<BusinessError> handleAll(Exception ex, HttpServletRequest req) {
         BusinessError body = new BusinessError(
-                BaseErrorCode.VALIDATION_FAILED,
+                BaseErrorCode.INTERNAL_SERVER_ERROR,
                 "An unexpected error occurred",
                 System.currentTimeMillis()
         );

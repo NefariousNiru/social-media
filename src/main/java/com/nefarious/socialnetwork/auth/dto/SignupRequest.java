@@ -1,6 +1,7 @@
 package com.nefarious.socialnetwork.auth.dto;
 
 import com.nefarious.socialnetwork.auth.util.Constants;
+import com.nefarious.socialnetwork.user.aop.MinimumAge;
 import jakarta.validation.constraints.*;
 import lombok.Data;
 import java.time.LocalDate;
@@ -17,5 +18,5 @@ public class SignupRequest {
     @NotBlank @Size(min=1, max = 30) private String username;
     @NotBlank private String firstName;
     @NotBlank private String lastName;
-    @NotNull @Past LocalDate dateOfBirth;
+    @NotNull @Past @MinimumAge LocalDate dateOfBirth;
 }

@@ -6,8 +6,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
-
 @Data
 @AllArgsConstructor
 @Builder
@@ -18,7 +16,9 @@ public class UserProfile {
     private String lastName;
     private String bio;
     private String profileImageUrl;
-    private LocalDate dateOfBirth;
+    private String organization;
+    private String school;
+    private String position;
 
     public static UserProfile from(User user) {
         return UserProfile.builder()
@@ -27,7 +27,9 @@ public class UserProfile {
                 .lastName(user.getLastName())
                 .bio(user.getBio())
                 .profileImageUrl(user.getProfileImageUrl())
-                .dateOfBirth(user.getDateOfBirth())
+                .organization(user.getOrganization())
+                .school(user.getSchool())
+                .position(user.getPosition())
                 .build();
     }
 }

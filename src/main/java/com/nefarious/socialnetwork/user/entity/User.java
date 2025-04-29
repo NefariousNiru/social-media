@@ -54,4 +54,13 @@ public class User {
 
     @Column(name = "profile_image_url")
     private String profileImageUrl;
+
+    @Column(name = "organization", length = 50)
+    private String organization;
+
+    @Column(name = "school", length = 50)
+    private String school;
+
+    @Column(name = "position", length = 25)
+    private String position;
 }

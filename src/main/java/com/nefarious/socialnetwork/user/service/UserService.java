@@ -7,11 +7,13 @@ import com.nefarious.socialnetwork.exceptions.BusinessException;
 import com.nefarious.socialnetwork.user.repository.UserRepository;
 import com.nefarious.socialnetwork.auth.util.enums.AuthErrorCode;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;    // Auto Injected from a bean in SecurityConfig.java
@@ -40,7 +42,9 @@ public class UserService {
                 .isEmailVerified(false)
                 .build();
 
+        log.debug("about to save from save(): {}", user);
         userRepository.save(user);
+        log.debug("Returned from save(): {}", user);
     }
 
     /**
