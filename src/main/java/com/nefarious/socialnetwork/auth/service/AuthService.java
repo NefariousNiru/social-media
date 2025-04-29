@@ -15,6 +15,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.UUID;
+
 
 @Slf4j
 @Service
@@ -54,7 +56,8 @@ public class AuthService {
      */
     public SessionResponse signin(@Valid SigninRequest request) {
         userService.authenticate(request);
-        return this.generateTokenAndCreateSession(request.getEmail());
+        User user = userService.getByEmail(request.getEmail());
+        return this.generateTokenAndCreateSession(user.getId());
     }
 
     /**
@@ -67,7 +70,8 @@ public class AuthService {
     public SessionResponse verifyOtpAndCreateSession(String email, String code) {
         if (!otpService.validateOtp(email, code)) throw new BusinessException(AuthErrorCode.INVALID_OTP);
         userService.markEmailVerified(email);
-        return this.generateTokenAndCreateSession(email);
+        User user = userService.getByEmail(email);
+        return this.generateTokenAndCreateSession(user.getId());
     }
 
     /**
@@ -84,16 +88,35 @@ public class AuthService {
     }
 
     /**
+     * Refresh and provide a new access and refresh token pair, using a valid existing refresh token.
+     * @param refreshToken the refresh token
+     */
+    public SessionResponse refreshSession(String refreshToken) {
+        UUID userId = sessionService.validateRefreshToken(refreshToken).orElseThrow(() -> new BusinessException(AuthErrorCode.INVALID_CREDENTIALS));
+        sessionService.revokeSession(refreshToken, TokenType.REFRESH);
+        return this.generateTokenAndCreateSession(userId);
+    }
+
+    /**
+     * Revoke access and refresh token
+     * @param accessToken Access Token to be revoked
+     * @param refreshToken RefreshToken to be revoked
+     */
+    public void revokeSession(String accessToken, String refreshToken) {
+        sessionService.revokeSession(accessToken, TokenType.ACCESS);
+        sessionService.revokeSession(refreshToken, TokenType.REFRESH);
+    }
+
+    /**
      * Generate a token using {@link JwtTokenProvider} and create a session using {@link SessionService} (persist in Redis)
-     * @param email email of user to create token against
+     * @param userId userId of user to create token against
      * @return sessionResponse {@link SessionResponse} type object
      */
-    private SessionResponse generateTokenAndCreateSession(String email) {
-        User user = userService.getByEmail(email);
-        String accessToken = jwtTokenProvider.generateToken(user.getId(), TokenType.ACCESS);
-        String refreshToken = jwtTokenProvider.generateToken(user.getId(), TokenType.REFRESH);
-        sessionService.createSession(accessToken, user.getId(), TokenType.ACCESS);
-        sessionService.createSession(refreshToken, user.getId(), TokenType.REFRESH);
+    private SessionResponse generateTokenAndCreateSession(UUID userId) {
+        String accessToken = jwtTokenProvider.generateToken(userId, TokenType.ACCESS);
+        String refreshToken = jwtTokenProvider.generateToken(userId, TokenType.REFRESH);
+        sessionService.createSession(accessToken, userId, TokenType.ACCESS);
+        sessionService.createSession(refreshToken, userId, TokenType.REFRESH);
         return new SessionResponse(accessToken, refreshToken);
     }
 }

@@ -1,11 +1,8 @@
 package com.nefarious.socialnetwork.auth.controller;
 
-import com.nefarious.socialnetwork.auth.dto.OtpVerificationRequest;
-import com.nefarious.socialnetwork.auth.dto.SessionResponse;
-import com.nefarious.socialnetwork.auth.dto.SigninRequest;
+import com.nefarious.socialnetwork.auth.dto.*;
 import com.nefarious.socialnetwork.auth.service.AuthService;
 import com.nefarious.socialnetwork.auth.util.AuthEndpoint;
-import com.nefarious.socialnetwork.auth.dto.SignupRequest;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import lombok.RequiredArgsConstructor;
@@ -78,5 +75,18 @@ public class AuthController {
     public ResponseEntity<Void> resendOtp(@RequestParam @Email String email) {
         authService.generateAndSaveAndEmailOtp(email);
         return ResponseEntity.accepted().build();
+    }
+
+
+    @PostMapping(AuthEndpoint.REFRESH)
+    public ResponseEntity<SessionResponse> refresh(@Valid @RequestBody RefreshTokenRequest request) {
+        SessionResponse response = authService.refreshSession(request.getRefreshToken());
+        return ResponseEntity.ok(response);
+    }
+
+    @PostMapping(AuthEndpoint.LOGOUT)
+    public ResponseEntity<Void> logout(@Valid @RequestBody LogoutRequest request) {
+        authService.revokeSession(request.getAccessToken(), request.getRefreshToken());
+        return ResponseEntity.ok().build();
     }
 }

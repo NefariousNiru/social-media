@@ -7,4 +7,5 @@ public class AuthEndpoint {
     public static final String AUTH_VERIFY      = "/verify";
     public static final String RESEND_OTP       = "/resend-otp";
     public static final String REFRESH          = "/refresh";
+    public static final String LOGOUT           = "/logout";
 }
