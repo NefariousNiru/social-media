@@ -77,16 +77,51 @@ public class AuthController {
         return ResponseEntity.accepted().build();
     }
 
-
+    /**
+     * Refreshes the session by generating new access and refresh tokens.
+     *
+     * @param request the refresh token request containing the old refresh token
+     * @return a new session response with updated tokens
+     */
     @PostMapping(AuthEndpoint.REFRESH)
     public ResponseEntity<SessionResponse> refresh(@Valid @RequestBody RefreshTokenRequest request) {
         SessionResponse response = authService.refreshSession(request.getRefreshToken());
         return ResponseEntity.ok(response);
     }
 
+    /**
+     * Logs out the user by revoking their access and refresh tokens.
+     *
+     * @param request the logout request containing access and refresh tokens
+     * @return an empty response indicating successful logout
+     */
     @PostMapping(AuthEndpoint.LOGOUT)
     public ResponseEntity<Void> logout(@Valid @RequestBody LogoutRequest request) {
         authService.revokeSession(request.getAccessToken(), request.getRefreshToken());
+        return ResponseEntity.ok().build();
+    }
+
+    /**
+     * Initiates the forgot password process by sending a reset link or OTP to the user.
+     *
+     * @param request the forgot password request containing user identification (e.g., email)
+     * @return an accepted response indicating the request was processed
+     */
+    @PostMapping(AuthEndpoint.FORGOT_PASSWORD)
+    public ResponseEntity<Void> forgotPasswordRequest(@Valid @RequestBody ForgotPasswordRequest request) {
+        authService.requestForgotPassword(request);
+        return ResponseEntity.accepted().build();
+    }
+
+    /**
+     * Verifies the forgot password request by validating the OTP or reset token and updating the password.
+     *
+     * @param request the forgot password verification request containing verification details
+     * @return an OK response indicating successful password reset
+     */
+    @PostMapping(AuthEndpoint.FORGOT_PASSWORD_VERIFY)
+    public ResponseEntity<Void> forgotPasswordVerify(@Valid @RequestBody ForgotPasswordVerifyRequest request) {
+        authService.verifyForgotPassword(request);
         return ResponseEntity.ok().build();
     }
 }

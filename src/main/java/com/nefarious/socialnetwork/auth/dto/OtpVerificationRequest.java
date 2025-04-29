@@ -1,5 +1,6 @@
 package com.nefarious.socialnetwork.auth.dto;
 
+import com.nefarious.socialnetwork.auth.util.Constants;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
@@ -10,5 +11,5 @@ import lombok.Data;
 @Data
 public class OtpVerificationRequest {
     @Email @NotBlank private String email;
-    @NotBlank @Size(min=10, max=10) @Pattern(regexp = "^[A-Za-z0-9]{10}$", message = "Invalid OTP") private String code;
+    @NotBlank @Size(min=10, max=10) @Pattern(regexp = Constants.VALID_OTP_REGEXP, message = Constants.INVALID_OTP) private String code;
 }

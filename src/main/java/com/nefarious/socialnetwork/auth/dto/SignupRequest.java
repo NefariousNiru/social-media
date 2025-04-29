@@ -1,5 +1,6 @@
 package com.nefarious.socialnetwork.auth.dto;
 
+import com.nefarious.socialnetwork.auth.util.Constants;
 import jakarta.validation.constraints.*;
 import lombok.Data;
 import java.time.LocalDate;
@@ -10,8 +11,8 @@ import java.time.LocalDate;
 public class SignupRequest {
     @Email @NotBlank private String email;
     @NotBlank @Size(min = 8, max = 24)
-    @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,24}$",
-            message = "Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character.")
+    @Pattern(regexp = Constants.VALID_PASSWORD_REGEXP,
+            message = Constants.INVALID_PASSWORD_COMBINATION)
     private String password;
     @NotBlank @Size(min=1, max = 30) private String username;
     @NotBlank private String firstName;

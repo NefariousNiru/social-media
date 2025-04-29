@@ -1,10 +1,8 @@
 package com.nefarious.socialnetwork.auth.service;
 
 import com.nefarious.socialnetwork.annotation.RateLimit;
+import com.nefarious.socialnetwork.auth.dto.*;
 import com.nefarious.socialnetwork.auth.security.JwtTokenProvider;
-import com.nefarious.socialnetwork.auth.dto.SigninRequest;
-import com.nefarious.socialnetwork.auth.dto.SignupRequest;
-import com.nefarious.socialnetwork.auth.dto.SessionResponse;
 import com.nefarious.socialnetwork.user.entity.User;
 import com.nefarious.socialnetwork.exceptions.BusinessException;
 import com.nefarious.socialnetwork.auth.service.interfaces.EmailService;
@@ -109,6 +107,39 @@ public class AuthService {
     public void revokeSession(String accessToken, String refreshToken) {
         sessionService.revokeSession(accessToken, TokenType.ACCESS);
         sessionService.revokeSession(refreshToken, TokenType.REFRESH);
+    }
+
+    /**
+     * Initiates the forgot password process by generating and sending an OTP to the user's email.
+     * Applies rate limiting based on the user's email to prevent abuse.
+     *
+     * @param request the forgot password request containing the user's email
+     * @throws BusinessException if the user's email is not verified
+     */
+    @RateLimit(key = "forgot-password:{email}", property = "rate-limit.forgot-password-attempts")
+    public void requestForgotPassword(ForgotPasswordRequest request) {
+        User user = userService.getByEmail(request.getEmail());
+        if (!user.isEmailVerified()) {
+            throw new BusinessException(AuthErrorCode.EMAIL_NOT_VERIFIED);
+        }
+        this.generateAndSaveAndEmailOtp(request.getEmail());
+    }
+
+    /**
+     * Verifies the OTP submitted during the forgot password process, updates the user's password,
+     * and invalidates all active sessions for security.
+     * Applies rate limiting based on the user's email to prevent brute-force attempts.
+     *
+     * @param request the forgot password verification request containing the email, OTP, and new password
+     * @throws BusinessException if the OTP is invalid
+     */
+    @RateLimit(key = "verify-forgot-password:{email}", property = "rate-limit.forgot-password-attempts")
+    public void verifyForgotPassword(ForgotPasswordVerifyRequest request) {
+        if (!otpService.validateOtp(request.getEmail(), request.getCode())) {
+            throw new BusinessException(AuthErrorCode.INVALID_OTP);
+        }
+        userService.updatePassword(request.getEmail(), request.getNewPassword());
+        sessionService.invalidateAllSessionsForUser(userService.getByEmail(request.getEmail()).getId());
     }
 
     /**

@@ -81,4 +81,10 @@ public class UserService {
         return userRepository.findByEmail(email)
                 .orElseThrow(() -> new BusinessException(AuthErrorCode.USER_NOT_EXISTS));
     }
+
+    public void updatePassword(String email, String rawPassword) {
+        User user = this.getByEmail(email);
+        user.setPassword(passwordEncoder.encode(rawPassword));
+        userRepository.save(user);
+    }
 }

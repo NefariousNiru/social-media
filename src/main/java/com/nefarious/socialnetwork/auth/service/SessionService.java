@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 import java.time.Duration;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -32,6 +33,10 @@ public class SessionService {
         long ttl = tokenType == TokenType.ACCESS ? accessExpirationMs : refreshExpirationMs;
         redis.opsForValue()
                 .set(key, userId.toString(), Duration.ofMillis(ttl));
+
+        // Reverse lookup if need be to invalidate
+        String userSessionKey = "user-sessions:" + userId;
+        redis.opsForList().rightPush(userSessionKey, key);
     }
 
     /** Validate Access Token */
@@ -43,6 +48,17 @@ public class SessionService {
     public Optional<UUID> validateRefreshToken(String token) {
         return validateSession(token, TokenType.REFRESH);
     }
+
+    /** Invalidate All Refresh Token & Access Tokens for a userId */
+    public void invalidateAllSessionsForUser(UUID userId) {
+        String userSessionKey = "user-sessions:" + userId;
+        List<String> keys = redis.opsForList().range(userSessionKey, 0, -1);
+        if (keys != null && !keys.isEmpty()) {
+            redis.delete(keys);
+        }
+        redis.delete(userSessionKey);
+    }
+
 
     /**
      * This method validates a session by checking if a token is valid.
