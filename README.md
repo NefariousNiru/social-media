@@ -43,6 +43,7 @@ This project is a **Social Media Network** built using **Spring Boot**, **Postgr
 ✅ WebSocket connection for user interactions.  
 ✅ Event-driven notifications when users like/follow/comment.  
 ✅ [Spring WebSockets Guide](https://docs.spring.io/spring-framework/docs/current/reference/html/web.html#websocket)
+✅ Global IP Based Rate Limiting
 
 ### **Step 5: Search, Trending & Recommendations**
 ✅ Implement ElasticSearch for full-text search.  

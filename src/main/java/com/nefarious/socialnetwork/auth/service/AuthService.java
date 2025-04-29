@@ -1,5 +1,6 @@
 package com.nefarious.socialnetwork.auth.service;
 
+import com.nefarious.socialnetwork.annotation.RateLimit;
 import com.nefarious.socialnetwork.auth.security.JwtTokenProvider;
 import com.nefarious.socialnetwork.auth.dto.SigninRequest;
 import com.nefarious.socialnetwork.auth.dto.SignupRequest;
@@ -46,7 +47,7 @@ public class AuthService {
     }
 
     /**
-     * Handles user signin requests.
+     * Handles user signin requests. Adds a RateLimit AOP to limit queries to this window
      *
      * <p>Authenticates the user credentials, and upon successful authentication,
      * generates access and refresh tokens and creates a session.
@@ -54,6 +55,7 @@ public class AuthService {
      * @param request {@link SigninRequest} containing email and password.
      * @return {@link SessionResponse} containing access and refresh tokens upon successful signin.
      */
+    @RateLimit(key = "signin:{email}", property = "rate-limit.login-attempts")
     public SessionResponse signin(@Valid SigninRequest request) {
         userService.authenticate(request);
         User user = userService.getByEmail(request.getEmail());
@@ -75,13 +77,14 @@ public class AuthService {
     }
 
     /**
-     * Generates a new OTP for the given email, saves it, and sends it via email.
+     * Generates a new OTP for the given email, saves it, and sends it via email. Rate-limited using RateLimit AOP.
      *
      * <p>Creates a one-time password (OTP), stores it for verification,
      * and emails the OTP to the provided address.
      *
      * @param email the email address to which the OTP will be sent.
      */
+    @RateLimit(key = "otp:{email}", property = "rate-limit.otp-attempts")
     public void generateAndSaveAndEmailOtp(String email) {
         String code = otpService.generateAndSaveOtp(email);
         emailService.sendOtpEmail(email, code);
@@ -91,6 +94,7 @@ public class AuthService {
      * Refresh and provide a new access and refresh token pair, using a valid existing refresh token.
      * @param refreshToken the refresh token
      */
+    @RateLimit(key = "refresh:{refreshToken}", property = "rate-limit.refresh-attempts")
     public SessionResponse refreshSession(String refreshToken) {
         UUID userId = sessionService.validateRefreshToken(refreshToken).orElseThrow(() -> new BusinessException(AuthErrorCode.INVALID_CREDENTIALS));
         sessionService.revokeSession(refreshToken, TokenType.REFRESH);
