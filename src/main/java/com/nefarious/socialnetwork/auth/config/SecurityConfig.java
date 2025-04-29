@@ -55,7 +55,7 @@ public class SecurityConfig {
             // 2) configure URL authorization
             .authorizeHttpRequests(auth -> auth
                     // allow unauthenticated access to any /auth/** endpoint
-                    .requestMatchers("/auth/**").permitAll()
+                    .requestMatchers("/auth/**", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
                     // everything else requires a valid token
                     .anyRequest().authenticated()
             )
