@@ -25,7 +25,7 @@ public class AuthController {
      * @param request {@link SignupRequest} the signup request data containing email, password, username, etc.
      * @return 202 Accepted if signup request is successfully processed
      */
-    @PostMapping(AuthEndpoint.AUTH_SIGNUP_V1)
+    @PostMapping(AuthEndpoint.AUTH_SIGNUP)
     public ResponseEntity<Void> signup(@Valid @RequestBody SignupRequest request) {
         authService.signup(request);
         return ResponseEntity.accepted().build();
@@ -40,7 +40,7 @@ public class AuthController {
      * @param request {@link SigninRequest} containing email and password.
      * @return 200 OK with {@link SessionResponse} containing tokens if authentication succeeds.
      */
-    @PostMapping(AuthEndpoint.AUTH_SIGNIN_V1)
+    @PostMapping(AuthEndpoint.AUTH_SIGNIN)
     public ResponseEntity<SessionResponse> signin(@Valid @RequestBody SigninRequest request) {
         SessionResponse response = authService.signin(request);
         return ResponseEntity.ok(response);
@@ -56,7 +56,7 @@ public class AuthController {
      * @param request {@link OtpVerificationRequest} containing email and OTP code.
      * @return 200 OK with {@link SessionResponse} containing access and refresh tokens upon successful verification.
      */
-    @PostMapping(AuthEndpoint.AUTH_VERIFY_V1)
+    @PostMapping(AuthEndpoint.AUTH_VERIFY)
     public ResponseEntity<SessionResponse> verify(@Valid @RequestBody OtpVerificationRequest request) {
         SessionResponse response = authService.verifyOtpAndCreateSession(request.getEmail(), request.getCode());
         return ResponseEntity.ok(response);
@@ -71,7 +71,7 @@ public class AuthController {
      * @param email the email address to which the OTP will be sent. Must be a valid email.
      * @return 202 Accepted if the OTP is successfully generated and sent.
      */
-    @GetMapping(AuthEndpoint.RESEND_OTP_V1)
+    @GetMapping(AuthEndpoint.RESEND_OTP)
     public ResponseEntity<Void> resendOtp(@RequestParam @Email String email) {
         authService.generateAndSaveAndEmailOtp(email);
         return ResponseEntity.accepted().build();
@@ -83,7 +83,7 @@ public class AuthController {
      * @param request the refresh token request containing the old refresh token
      * @return a new session response with updated tokens
      */
-    @PostMapping(AuthEndpoint.REFRESH_V1)
+    @PostMapping(AuthEndpoint.REFRESH)
     public ResponseEntity<SessionResponse> refresh(@Valid @RequestBody RefreshTokenRequest request) {
         SessionResponse response = authService.refreshSession(request.getRefreshToken());
         return ResponseEntity.ok(response);
@@ -95,7 +95,7 @@ public class AuthController {
      * @param request the logout request containing access and refresh tokens
      * @return an empty response indicating successful logout
      */
-    @PostMapping(AuthEndpoint.LOGOUT_V1)
+    @PostMapping(AuthEndpoint.LOGOUT)
     public ResponseEntity<Void> logout(@Valid @RequestBody LogoutRequest request) {
         authService.revokeSession(request.getAccessToken(), request.getRefreshToken());
         return ResponseEntity.ok().build();
@@ -107,7 +107,7 @@ public class AuthController {
      * @param request the forgot password request containing user identification (e.g., email)
      * @return an accepted response indicating the request was processed
      */
-    @PostMapping(AuthEndpoint.FORGOT_PASSWORD_V1)
+    @PostMapping(AuthEndpoint.FORGOT_PASSWORD)
     public ResponseEntity<Void> forgotPasswordRequest(@Valid @RequestBody ForgotPasswordRequest request) {
         authService.requestForgotPassword(request);
         return ResponseEntity.accepted().build();
@@ -119,7 +119,7 @@ public class AuthController {
      * @param request the forgot password verification request containing verification details
      * @return an OK response indicating successful password reset
      */
-    @PostMapping(AuthEndpoint.FORGOT_PASSWORD_VERIFY_V1)
+    @PostMapping(AuthEndpoint.FORGOT_PASSWORD_VERIFY)
     public ResponseEntity<Void> forgotPasswordVerify(@Valid @RequestBody ForgotPasswordVerifyRequest request) {
         authService.verifyForgotPassword(request);
         return ResponseEntity.ok().build();
