@@ -82,6 +82,11 @@ public class UserService {
                 .orElseThrow(() -> new BusinessException(AuthErrorCode.USER_NOT_EXISTS));
     }
 
+    /**
+     * Updates a user's password
+     * @param email Email of user
+     * @param rawPassword Plaintext password of user
+     */
     public void updatePassword(String email, String rawPassword) {
         User user = this.getByEmail(email);
         user.setPassword(passwordEncoder.encode(rawPassword));

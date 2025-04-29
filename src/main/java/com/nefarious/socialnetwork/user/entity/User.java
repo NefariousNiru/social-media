@@ -33,11 +33,11 @@ public class User {
     private String username;
 
     /** First Name, non-null */
-    @Column(name = "first_name", nullable = false)
+    @Column(name = "first_name", nullable = false, length = 30)
     private String firstName;
 
     /** Last Name, non-null */
-    @Column(name = "last_name", nullable = false)
+    @Column(name = "last_name", nullable = false, length = 30)
     private String lastName;
 
     /** User’s date of birth, stored as SQL DATE */
@@ -48,4 +48,10 @@ public class User {
     @Builder.Default
     @Column(name = "is_email_verified", nullable = false)
     private boolean isEmailVerified = false;
+
+    @Column(name = "bio", length = 250)
+    private String bio;
+
+    @Column(name = "profile_image_url")
+    private String profileImageUrl;
 }
