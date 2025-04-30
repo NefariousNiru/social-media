@@ -3,6 +3,7 @@ package com.nefarious.socialnetwork.auth.service;
 import com.nefarious.socialnetwork.annotation.RateLimit;
 import com.nefarious.socialnetwork.auth.dto.*;
 import com.nefarious.socialnetwork.auth.security.JwtTokenProvider;
+import com.nefarious.socialnetwork.follow.service.UserNodeSyncService;
 import com.nefarious.socialnetwork.user.entity.User;
 import com.nefarious.socialnetwork.exceptions.BusinessException;
 import com.nefarious.socialnetwork.auth.service.interfaces.EmailService;
@@ -26,6 +27,7 @@ public class AuthService {
     private final EmailService emailService;
     private final JwtTokenProvider jwtTokenProvider;
     private final SessionService sessionService;
+    private final UserNodeSyncService userNodeSyncService;
 
     /**
      * Handles the user signup process.
@@ -36,7 +38,8 @@ public class AuthService {
      * @param request {@link SignupRequest} The signup request containing user information.
      */
     public void signup(@Valid SignupRequest request) {
-        userService.createUser(request);
+        User user = userService.createUser(request);
+        userNodeSyncService.persistUserNode(user.getId(), request.getUsername());
         try {
             this.generateAndSaveAndEmailOtp(request.getEmail());
         } catch (BusinessException e) {

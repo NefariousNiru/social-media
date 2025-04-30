@@ -7,9 +7,10 @@ import com.nefarious.socialnetwork.user.dto.UpdateProfileRequest;
 import com.nefarious.socialnetwork.user.dto.UserProfile;
 import com.nefarious.socialnetwork.user.entity.User;
 import com.nefarious.socialnetwork.user.repository.UserRepository;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.util.UUID;
 
 @Service

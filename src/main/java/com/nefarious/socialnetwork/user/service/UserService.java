@@ -24,7 +24,7 @@ public class UserService {
      * @param signupRequest {@link SignupRequest} the request containing user details for signup
      * @throws IllegalArgumentException if the email or username is already in use
      */
-    public void createUser(SignupRequest signupRequest) {
+    public User createUser(SignupRequest signupRequest) {
         if (userRepository.findByEmail(signupRequest.getEmail()).isPresent()) {
             throw new BusinessException(AuthErrorCode.EMAIL_IN_USE);
         }
@@ -42,9 +42,8 @@ public class UserService {
                 .isEmailVerified(false)
                 .build();
 
-        log.debug("about to save from save(): {}", user);
         userRepository.save(user);
-        log.debug("Returned from save(): {}", user);
+        return user;
     }
 
     /**
